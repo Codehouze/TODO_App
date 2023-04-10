@@ -1,0 +1,50 @@
+{
+  "name": "TODO_App",
+  "scripts": {
+    "start": "node dist/src/app.ts",
+    "dev": "nodemon src/app.ts",
+    "build": "yarn tsc",
+    "test": "mocha --require ts-node/register test/**/*.spec.ts",
+    "pm2": "tsc && pm2 start pm2.config.js",
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -- migration:create -- config ./src/database/config/index.ts",
+    "db:migrate": "",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
+    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync"
+  },
+  "packageManager": "yarn@3.5.0",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/chai": "^4.3.4",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/mocha": "^10.0.1",
+    "@types/nodemailer": "^6.4.4",
+    "@types/pg": "^8.6.5",
+    "eslint": "^8.14.0",
+    "esm": "^3.2.25",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2",
+    "ts-mocha": "^10.0.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.10.0",
+    "reflect-metadata": "^0.1.13",
+    "request": "^2.88.2",
+    "typeorm": "^0.3.14",
+    "typeorm-global-scopes": "^0.2.3"
+  }
+}
