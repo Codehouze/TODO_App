@@ -1,4 +1,4 @@
-import User from "../database/entities/User";
+import User from "../entity/User";
 
 class UserService {
   static async signUp(userName: string, password: string): Promise<any> {

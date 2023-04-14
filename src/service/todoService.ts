@@ -1,19 +1,18 @@
-import Todo from "../database/entities/Todo";
+import Todo from "../entity/Todo";
 import { ITodo } from "../Interface/index";
 import { getRepository } from "typeorm";
-import { DB } from "../database/config";
 
 class TodoService {
   static async createTodo(data: ITodo): Promise<any> {
-    const todoRepository = DB.getRepository(Todo);
+    const todoRepo = getRepository(Todo);
     const { title } = data;
     const todo = new Todo();
     todo.title = title;
-    return await todoRepository.save(todo);
+    return await todoRepo.save(todo);
   }
 
   static async updateTodo(id: number, data: ITodo): Promise<any> {
-    const { title, completed } = data;
+    const { title } = data;
     const todo = await this.getOneTodo(id);
     todo.title = title;
     return await Todo.update(id, todo);
@@ -41,8 +40,9 @@ class TodoService {
     }
   }
   static async completeTodo(id: number, completed: boolean): Promise<any> {
-    const getOneTodo = await this.getOneTodo(id);
-    if (getOneTodo) {
+    const updateTodo = await Todo.update(id, { completed: true });
+    if (updateTodo) {
+      return updateTodo;
     }
   }
 }

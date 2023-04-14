@@ -44,7 +44,9 @@
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.2",
+    "sqlite3": "^5.1.6",
     "typeorm": "^0.3.14",
-    "typeorm-global-scopes": "^0.2.3"
+    "typeorm-global-scopes": "^0.2.3",
+    "typeorm-pagination": "^2.0.3"
   }
 }

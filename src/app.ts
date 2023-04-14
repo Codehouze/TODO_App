@@ -1,26 +1,30 @@
-import "reflect-metadata";
-import PostgreSqlConnector from "./database/connectors/PostgreSqlConnector";
-import { IDatabaseConnector } from "./Interface/index";
-/**
- * @class App
- */
-class App {
-  dbConnector?: IDatabaseConnector;
+import * as dotenv from "dotenv";
+import express, { Request, Response } from "express";
 
-  protected async setupDependencies(): Promise<void> {
-    this.dbConnector = new PostgreSqlConnector();
-    await this.dbConnector.connect();
-  }
+import { TryDBConnect } from "./helper";
 
-  checkDependencies(): void {
-    if (!PostgreSqlConnector.getClient()) {
-      throw new Error("Initialize DB!!!");
-    }
-  }
+dotenv.config();
+const PORT = process.env.PORT || 9000;
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-  close() {
-    this.dbConnector?.disconnect();
-  }
-}
+app.use(async (_req: Request, res: Response, next) => {
+  await TryDBConnect(() => {
+    res.json({
+      error: "Database connection error, please try again later",
+    });
+  }, next);
+});
+app.get("/", (_, res) => {
+  res.status(200).json({
+    success: true,
+    message: "You are on node-typescript-boilerplate.",
+  });
+});
 
-export default App;
+app.listen(PORT, () => {
+  console.log(`CONNECTED TO DB AND SERVER START ON ${PORT}`);
+});
+
+module.exports =app;
