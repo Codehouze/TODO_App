@@ -13,7 +13,7 @@ export class User extends BaseEntity{
   id!: number;
 
   @Column()
-  userName!: string;
+  email!: string;
 
   @Column()
   password!: string;

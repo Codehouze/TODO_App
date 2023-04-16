@@ -5,7 +5,7 @@ class UserService {
     await this.getOne(userName);
 
     const user = new User();
-    user.userName = userName;
+    user.email = userName;
     user.password = password;
 
     await user.save();
@@ -21,7 +21,7 @@ class UserService {
   // const token = jwt.sign({ userId: user.id }, "mysecretkey");
   // res.json({ token });
 
-  static async login(userName: string, password: string): Promise<any> {}
+  static async login(email: string, password: string): Promise<any> {}
 
   static async getOneById(id: number): Promise<any> {
     const user = await User.findOne({ where: { id } });
@@ -30,8 +30,8 @@ class UserService {
     }
   }
 
-  static async getOne(userName: string): Promise<any> {
-    const user = await User.findOne({ where: { userName } });
+  static async getOne(email: string): Promise<any> {
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       throw new Error("User not found");
     }
