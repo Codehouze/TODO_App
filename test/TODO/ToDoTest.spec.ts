@@ -1,113 +1,181 @@
 import dotenv from "dotenv";
 dotenv.config();
-import * as chai from "chai";
-import "chai-http";
+import sinon from "sinon";
+import chai from "chai";
+import chaiHttp from "chai-http";
 const assert = require("assert");
 import "mocha";
-import { DataSource, Repository } from "typeorm";
-import { createConnection, Connection } from "typeorm";
-import { IMemoryDb, newDb } from "pg-mem";
-import { PostgresDriver } from "typeorm/driver/postgres/PostgresDriver";
 
 import bcrypt from "bcrypt";
 import { after, before, beforeEach } from "mocha";
-import { init } from "pgtest";
 
 const app = require("../../src/app");
 const { Todo } = require("../../src/entity/Todo");
 const { User } = require("../../src/entity/User");
 
-chai.use(require("chai-http"));
+chai.use(chaiHttp);
 
 const expect = chai.expect;
 
-let connection: Connection;
-
-before(async () => {
-  const db = newDb({
-    autoCreateForeignKeyIndices: true,
-  });
-
-  //==== create a Typeorm connection
-  const connection: Connection = await db.adapters.createTypeormConnection({
-    type: "postgres",
-    entities: [User, Todo],
-  });
-
-  PostgresDriver.prototype.= async () => {
-    return "test_database";
-  };
-  console.log(connection);
-});
-after(async () => {
-  await connection.close();
-});
-// await connection.synchronize();
-
+let authToken: string;
 describe("TODO Endpoints", () => {
-  let authToken: string;
+  // let authToken: string;
 
-  beforeEach(async () => {
-    const user = new User();
-    user.username = "testuser";
-    user.password = await bcrypt.hash("testpassword", 10);
-    await user.save();
+  before(async () => {
+    const userSaveStub = sinon.stub(User.prototype, "save");
+    userSaveStub.resolves({});
 
     // Login to get the authentication token
     const res = await chai
       .request(app)
-      .post("/login")
+      .post("/api/v1/user/login")
       .send({ username: "testuser", password: "testpassword" });
     authToken = res.body.token;
   });
 
-  afterEach(async () => {
+  after(async () => {
     // Delete all todos and users after each test
-    await Todo.delete({});
-    await User.delete({});
+    sinon.restore();
   });
+  describe("POST /api/v1/todo", () => {
+    it("should create a new todo", async () => {
+      const todoSaveStub = sinon.stub(Todo.prototype, "save");
+      todoSaveStub.resolves({
+        title: "New Todo",
+        id: "abcd1234",
+      });
 
-  describe("GET /todos", () => {
-    it("should return an empty array if there are no todos", async () => {
       const res = await chai
         .request(app)
-        .get("/todos")
-        .set("Authorization", `Bearer ${authToken}`);
+        .post("/api/v1/todo")
+        .set("Authorization", `Bearer ${authToken}`)
+        .send({ title: "New Todo" });
+
       expect(res).to.have.status(200);
-      expect(res.body).to.be.an("array").that.is.empty;
+      expect(res.body.title).to.equal("New Todo");
+
+      const todo = await Todo.findOne({ id: "abcd1234" });
+      expect(todo).to.exist;
+      expect(todo.title).to.equal("New Todo");
+
+      todoSaveStub.restore(); // Clean up the stub
+    });
+  });
+  describe("GET /api/v1/todo/", () => {
+    it("should return an empty array if there are no todo's", async () => {
+      // Arrange
+      sinon.stub(Todo, "find").resolves([]);
+
+      // Act
+      const res = await chai
+        .request(app)
+        .get("/api/v1/todo/")
+        .set("Authorization", `Bearer ${authToken}`);
+      console.log(res);
+      // Assert
+      chai.expect(res).to.have.status(200);
+      chai.expect(res.body).to.be.an("array").that.is.empty;
+
+      // Clean up
+      sinon.restore();
     });
 
-    it("should return all todos", async () => {
-      const todo1 = new Todo();
-      todo1.title = "Todo 1";
-      await todo1.save();
-
-      const todo2 = new Todo();
-      todo2.title = "Todo 2";
-      await todo2.save();
+    it("should return all todo's", async () => {
+      const todoFindStub = sinon.stub(Todo, "find");
+      todoFindStub.resolves([{ title: "Todo 1" }, { title: "Todo 2" }]);
 
       const res = await chai
         .request(app)
-        .get("/todos")
+        .get("/api/v1/todo/")
         .set("Authorization", `Bearer ${authToken}`);
+
       expect(res).to.have.status(200);
       expect(res.body).to.be.an("array").that.has.lengthOf(2);
       expect(res.body[0].title).to.equal("Todo 1");
       expect(res.body[1].title).to.equal("Todo 2");
+
+      todoFindStub.restore(); // Clean up the stub
     });
   });
+  describe("GET /api/v1/todo/:id", () => {
+    it("should return a todo by id", async () => {
+      const todoFindOneStub = sinon.stub(Todo, "findOne");
+      todoFindOneStub.withArgs({ id: "abcd1234" }).resolves({
+        id: "abcd1234",
+        title: "Test Todo",
+      });
 
-  describe("POST /todos", () => {
-    it("should create a new todo", async () => {
       const res = await chai
         .request(app)
-        .post("/todos")
-        .set("Authorization", `Bearer ${authToken}`)
-        .send({ title: "New Todo" });
+        .get("/api/v1/todo/abcd1234")
+        .set("Authorization", `Bearer ${authToken}`);
+
       expect(res).to.have.status(200);
-      expect(res.body.title).to.equal("New Todo");
-      const todo = await Todo.findOne(res.body.id);
-      expect(todo).to.exist;
+      expect(res.body.title).to.equal("Test Todo");
+
+      todoFindOneStub.restore(); // Clean up the stub
+    });
+
+    it("should return a 404 error if todo is not found", async () => {
+      const todoFindOneStub = sinon.stub(Todo, "findOne");
+      todoFindOneStub.withArgs({ id: "nonexistent_id" }).resolves(null);
+
+      const res = await chai
+        .request(app)
+        .get("/api/v1/todo/nonexistent_id")
+        .set("Authorization", `Bearer ${authToken}`);
+
+      expect(res).to.have.status(404);
+
+      todoFindOneStub.restore(); // Clean up the stub
+    });
+  })
+  describe("PATCH /api/v1/todo/:id", () => {
+    it("should update a todo", async () => {
+      // Create a new todo to update
+      const newTodo = new Todo({
+        title: "New Todo",
+      });
+      await newTodo.save();
+
+      // Create a stub for the update method
+      const todoUpdateStub = sinon.stub(Todo, "update");
+      todoUpdateStub.resolves({});
+
+      // Make the PATCH request to update the todo
+      const res = await chai
+        .request(app)
+        .patch(`/api/v1/todo/${newTodo.id}`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send({ title: "Updated Todo" });
+
+      // Assertions
+      expect(res).to.have.status(200);
+      expect(res.body.title).to.equal("Updated Todo");
+
+      const updatedTodo = await Todo.findOne({ id: newTodo.id });
+      expect(updatedTodo).to.exist;
+      expect(updatedTodo.title).to.equal("Updated Todo");
+
+      todoUpdateStub.restore(); // Clean up the stub
+    });
+
+    it("should return a 404 error if the todo doesn't exist", async () => {
+      // Create a stub for the update method
+      const todoUpdateStub = sinon.stub(Todo, "update");
+      todoUpdateStub.resolves({});
+
+      // Make the PATCH request to update a non-existent todo
+      const res = await chai
+        .request(app)
+        .patch("/api/v1/todo/12345")
+        .set("Authorization", `Bearer ${authToken}`)
+        .send({ title: "Updated Todo" });
+
+      // Assertions
+      expect(res).to.have.status(404);
+
+      todoUpdateStub.restore(); // Clean up the stub
     });
   });
 });

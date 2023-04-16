@@ -1,12 +1,13 @@
 import express from "express";
 
-
 const router = express.Router();
 
-router.post("/login");
+router.post("/login"); // login
 
-router.post("/signup");
+router.post("/signup"); // signup
 
-router.get("/:id");
+router.get("/:id"); //  return a user
 
 export default router;
+
+7;

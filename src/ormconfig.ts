@@ -13,11 +13,10 @@ export default {
   password: DB_PASSWORD,
   database: DB_USERNAME,
   synchronize: true,
-  entities: ["src/entities/*.ts"],
-  migrations: ["src/database/migrations/*.ts"],
+  entities: [__dirname + "src/entity/*.ts"],
+
   cli: {
-    entitiesDir: "src/database/entities",
-    migrationsDir: "src/database/migrations",
+    entitiesDir: "src/database/entity",
   },
 
   seeds: [`src/seeds/**/*.${isCompiled ? "ts" : "js"}`],
