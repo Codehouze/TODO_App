@@ -1,49 +1,79 @@
-import Todo from "../entity/Todo";
+import Todo from "../database/entity/Todo";
 import { ITodo } from "../Interface/index";
-import { getRepository } from "typeorm";
+import { DB } from "../database/config/index";
+import User from "../database/entity/User";
 
 class TodoService {
-  static async createTodo(data: ITodo): Promise<any> {
-    const todoRepo = getRepository(Todo);
-    const { title } = data;
+  static async createTodo(
+    { title }: ITodo,
+    id: User
+  ): Promise<{ savedTodo: ITodo; message: string }> {
+    const todoRepo = DB.getRepository(Todo);
     const todo = new Todo();
     todo.title = title;
-    return await todoRepo.save(todo);
+    todo.user = id;
+    const savedTodo = await todoRepo.save(todo);
+    return { savedTodo, message: "Todo created successfully!" };
   }
 
-  static async updateTodo(id: number, data: ITodo): Promise<any> {
-    const { title } = data;
-    const todo = await this.getOneTodo(id);
-    todo.title = title;
-    return await Todo.update(id, todo);
-  }
+  static async updateTodo(id: number, { title }: ITodo): Promise<any> {
+    const todo = await this.getTodo(id);
 
-  static async getAllTodo(): Promise<any> {
-    const todo = await Todo.find();
-    if (!todo) {
-      throw new Error("Todo not found");
+    if (todo) {
+      todo.title = title;
+      const updatedTodo = await Todo.update(id, todo);
+      return { updatedTodo, message: "Todo was updated successfully" };
     }
-    return todo;
+    return { message: "Todo was not found" };
   }
 
-  static async getOneTodo(id: number): Promise<ITodo> {
-    const todo = await Todo.findOne({ where: { id } });
+  static async getAllTodo(id: any): Promise<any> {
+    const todoRepository = DB.getRepository(Todo);
+    const todo = await todoRepository.find({
+      where: { user: id, isDeleted: false },
+    });
+
     if (!todo) {
-      throw new Error("Todo not found");
+      return { message: "Todo Not Found" };
     }
-    return todo;
+    return { todo, message: "Todo Found" };
+  }
+
+  static async getOneTodo(id: number): Promise<any> {
+    const todo = await this.getTodo(id);
+    if (!todo) {
+      return "Todo not found";
+    }
+
+    return { todo, message: "Todo found" };
   }
 
   static async deleteTodo(id: number): Promise<any> {
-    const getOneTodo = await this.getOneTodo(id);
-    if (getOneTodo) {
+    const todoRepository = DB.getRepository(Todo);
+    const todo = await todoRepository.findOne({
+      where: { id, isDeleted: false },
+    });
+
+    if (!todo) {
+      return { message: "Todo not found" };
     }
+    const softDelete = await todoRepository.update(id, { isDeleted: true });
+
+    return { softDelete, message: "Todo deleted successfully" };
   }
   static async completeTodo(id: number, completed: boolean): Promise<any> {
-    const updateTodo = await Todo.update(id, { completed: true });
-    if (updateTodo) {
-      return updateTodo;
+    const completeTodo = await Todo.update(id, { completed: true });
+    if (completeTodo) {
+      return { completeTodo, message: "Todo completed" };
     }
+  }
+
+  static async getTodo(id: number) {
+    const todoRepository = DB.getRepository(Todo);
+    const todo = await todoRepository.findOne({
+      where: { id, isDeleted: false },
+    });
+    return todo;
   }
 }
 export default TodoService;

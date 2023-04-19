@@ -1,12 +1,13 @@
 import express from "express";
+import userCtrl from "../controller/userCtrl";
 
 const router = express.Router();
 
-router.post("/login"); // login
+router.post("/login",userCtrl.login); // login
 
-router.post("/signup"); // signup
+router.post("/signup",userCtrl.signUp); // signup
 
-router.get("/:id"); //  return a user
+router.get("/:id",userCtrl.getOne); //  return a user
 
 export default router;
 

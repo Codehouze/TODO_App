@@ -5,10 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  ManyToOne,
+  OneToMany,
 } from "typeorm";
+import Todo from "./Todo";
 
-@Entity({name:'user'})
-export class User extends BaseEntity{
+@Entity({ name: "user" })
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -17,6 +20,9 @@ export class User extends BaseEntity{
 
   @Column()
   password!: string;
+
+  @OneToMany(() => Todo, (todo) => todo.user)
+  todos!: Todo[];
 
   @CreateDateColumn({
     type: "timestamp",

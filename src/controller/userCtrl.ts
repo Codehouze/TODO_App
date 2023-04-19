@@ -1,4 +1,4 @@
-import { IUser } from "../Interface/index";
+import { ICreateUser } from "../Interface/index";
 
 import { NextFunction, Request, Response } from "express";
 import UserService from "../service/userService";
@@ -7,10 +7,15 @@ class UserController {
   static async signUp(req: any, res: Response, next: NextFunction) {
     try {
       const {
-        body: { userName, password },
+        body: { email, password },
       } = req;
-      const signUp = await UserService.signUp(userName, password);
-      return res.json({ message: "User created successfully!" });
+      const payload: ICreateUser = {
+        email,
+        password,
+      };
+      const { data, message } = await UserService.signUp(payload);
+
+      return res.json({ data, message });
     } catch (err) {
       next(err);
     }
@@ -19,10 +24,14 @@ class UserController {
   static async login(req: any, res: Response, next: NextFunction) {
     try {
       const {
-        body: { userName, password },
+        body: { email, password },
       } = req;
-      const login = await UserService.login(userName, password);
-      return res.json({ message: "Login successfully!" });
+      const payload: ICreateUser = {
+        email,
+        password,
+      };
+      const { data, message } = await UserService.login(payload);
+      return res.json({ data, message });
     } catch (err) {
       next(err);
     }
@@ -31,21 +40,10 @@ class UserController {
   static async getOne(req: any, res: Response, next: NextFunction) {
     try {
       const {
-        body: { userName },
-      } = req;
-      const getOne = await UserService.getOne(userName);
-      return getOne;
-    } catch (err) {
-      next(err);
-    }
-  }
-  static async getOneById(req: any, res: Response, next: NextFunction) {
-    try {
-      const {
         params: { id },
       } = req;
-      const getOneBy = await UserService.getOneById(id);
-      return getOneBy;
+      const { data, message } = await UserService.getOne(id);
+      return res.json({ data, message });
     } catch (err) {
       next(err);
     }

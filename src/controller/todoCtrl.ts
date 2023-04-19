@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ITodo } from "../Interface";
 import TodoService from "../service/todoService";
 
 class TodoController {
@@ -6,9 +7,14 @@ class TodoController {
     try {
       const {
         body: { title },
+        user: id,
       } = req;
-      const createTodo = await TodoService.createTodo(title);
-      return res.json({ message: "Todo created successfully!" });
+
+      const { savedTodo, message } = await TodoService.createTodo(
+        { title },
+        id
+      );
+      res.json({ savedTodo, message });
     } catch (err) {
       next(err);
     }
@@ -17,11 +23,14 @@ class TodoController {
   static async updateTodo(req: any, res: Response, next: NextFunction) {
     try {
       const {
-        params: { id },
         body: { title },
+        params: { id },
       } = req;
-      const updateTodo = await TodoService.updateTodo(id, title);
-      return res.json({ message: "Todo updated successfully!" });
+
+      const { updateTodo, message } = await TodoService.updateTodo(id, {
+        title,
+      });
+      return res.json({ updateTodo, message });
     } catch (err) {
       next(err);
     }
@@ -29,8 +38,12 @@ class TodoController {
 
   static async getAllTodo(req: any, res: Response, next: NextFunction) {
     try {
-      const getAllTodo = await TodoService.getAllTodo();
-      return getAllTodo;
+      const {
+        user: { id },
+      } = req;
+      const { todo, message } = await TodoService.getAllTodo(id);
+
+      res.json({ todo, message });
     } catch (err) {
       next(err);
     }
@@ -41,8 +54,8 @@ class TodoController {
       const {
         params: { id },
       } = req;
-      const getOneTodo = await TodoService.getOneTodo(id);
-      return getOneTodo;
+      const { todo, message } = await TodoService.getOneTodo(id);
+      return res.json({ todo, message });
     } catch (err) {
       next(err);
     }
@@ -53,8 +66,8 @@ class TodoController {
       const {
         params: { id },
       } = req;
-      const deleteTodo = await TodoService.deleteTodo(id);
-      return res.json({ message: "Todo deleted successfully!" });
+      const { softDelete, message } = await TodoService.deleteTodo(id);
+      return res.json({ softDelete, message });
     } catch (err) {
       next(err);
     }
@@ -67,13 +80,12 @@ class TodoController {
         body: { completed },
       } = req;
 
-      const completeTodo = await TodoService.completeTodo(id, completed);
-      return res.json({ message: "Todo updated successfully!" });
+      const { completeTodo, message } = await TodoService.completeTodo(id, completed);
+      return res.json({ completeTodo, message });
     } catch (err) {
       next(err);
     }
   }
 }
-// Define the routes
 
 export default TodoController;

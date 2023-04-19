@@ -6,7 +6,10 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   BaseEntity,
+  OneToMany,
+  ManyToOne,
 } from "typeorm";
+import User from "./User";
 
 @Entity({ name: "todo" })
 export class Todo extends BaseEntity {
@@ -18,6 +21,12 @@ export class Todo extends BaseEntity {
 
   @Column({ default: false })
   completed!: boolean;
+
+  @Column({ default: false })
+  isDeleted!: boolean;
+
+  @ManyToOne(() => User, (user) => user.todos)
+  user!: User;
 
   @CreateDateColumn({
     type: "timestamp",

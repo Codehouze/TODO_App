@@ -1,13 +1,3 @@
-import IDatabaseConnector from "./IDatabaseConnector";
+import { ICreateUser, ITodo } from "../Interface/interfaces";
 
-export interface ITodo {
-  title: string;
-  completed: boolean;
-}
-
-export interface IUser {
-  username: string;
-  password: string;
-}
-
-export { IDatabaseConnector };
+export { ICreateUser, ITodo };

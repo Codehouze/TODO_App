@@ -10,8 +10,8 @@ import bcrypt from "bcrypt";
 import { after, before, beforeEach } from "mocha";
 
 const app = require("../../src/app");
-const { Todo } = require("../../src/entity/Todo");
-const { User } = require("../../src/entity/User");
+const { Todo } = require("../../src/database/entity/Todo");
+const { User } = require("../../src/database/entity/User");
 
 chai.use(chaiHttp);
 
@@ -20,7 +20,7 @@ const expect = chai.expect;
 let authToken: string;
 describe("TODO Endpoints", () => {
   // let authToken: string;
-
+  console.log(app);
   before(async () => {
     const userSaveStub = sinon.stub(User.prototype, "save");
     userSaveStub.resolves({});
@@ -129,7 +129,7 @@ describe("TODO Endpoints", () => {
 
       todoFindOneStub.restore(); // Clean up the stub
     });
-  })
+  });
   describe("PATCH /api/v1/todo/:id", () => {
     it("should update a todo", async () => {
       // Create a new todo to update
