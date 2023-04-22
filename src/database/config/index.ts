@@ -25,3 +25,10 @@ const DB_CONFIG: DataSourceOptions = {
 };
 
 export const DB = new DataSource(DB_CONFIG);
+
+let dataSource: DataSource;
+export const ConnectDb = async () => {
+  dataSource = await DB.initialize();
+};
+
+export default ConnectDb;

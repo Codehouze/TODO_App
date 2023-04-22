@@ -34,7 +34,7 @@ class TodoService {
     });
 
     if (!todo) {
-      return { message: "Todo Not Found" };
+      return { data: [], message: "Todo Not Found" };
     }
     return { todo, message: "Todo Found" };
   }

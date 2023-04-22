@@ -56,6 +56,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "@faker-js/faker@npm:7.6.0"
+  checksum: 942af6221774e8c98a0eb6bc75265e05fb81a941170377666c3439aab9495dd321d6beedc5406f07e6ad44262b3e43c20961f666d116ad150b78e7437dd1bb2b
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -337,6 +344,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/faker@npm:^6.6.9":
+  version: 6.6.9
+  resolution: "@types/faker@npm:6.6.9"
+  dependencies:
+    faker: "*"
+  checksum: 8fb069b6f2bf2cefec42a214395f49695b881d70e651a215a61c2fa7494bb173d1a598c895882ff89df3702ab51c49c23433b3d4bcfd8323cf4f608ed9fb6ce8
+  languageName: node
+  linkType: hard
+
 "@types/json5@npm:^0.0.29":
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
@@ -439,10 +455,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "TODO_App@workspace:."
   dependencies:
+    "@faker-js/faker": ^7.6.0
     "@types/bcrypt": ^5.0.0
     "@types/bcryptjs": ^2.4.2
     "@types/chai": latest
     "@types/express": ^4.17.13
+    "@types/faker": ^6.6.9
     "@types/jsonwebtoken": ^8.5.8
     "@types/mocha": ^10.0.1
     "@types/nodemailer": ^6.4.4
@@ -455,6 +473,8 @@ __metadata:
     eslint: ^8.14.0
     esm: ^3.2.25
     express: ^4.18.2
+    express-validator: ^7.0.1
+    faker: ^6.6.6
     jsonwebtoken: ^8.5.1
     mocha: ^10.2.0
     nodemon: ^2.0.15
@@ -462,6 +482,8 @@ __metadata:
     reflect-metadata: ^0.1.13
     request: ^2.88.2
     sinon: ^15.0.3
+    sinon-as-promised: ^4.0.3
+    sinon-stub-promise: ^4.0.0
     supertest: ^6.2.2
     ts-mocha: ^10.0.0
     ts-node: ^10.9.1
@@ -1151,6 +1173,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"create-thenable@npm:~1.0.0":
+  version: 1.0.2
+  resolution: "create-thenable@npm:1.0.2"
+  dependencies:
+    object.omit: ~2.0.0
+    unique-concat: ~0.2.2
+  checksum: 7211ac1a5661eea00a269eaebf83a4ba2354cae0ddcf75ec027d88c96116c2bf1f34bcdb082b981d8ae4c41bf93cb11926865f9b58276524440a5e106fe11165
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^7.0.2":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
@@ -1540,6 +1572,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"express-validator@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "express-validator@npm:7.0.1"
+  dependencies:
+    lodash: ^4.17.21
+    validator: ^13.9.0
+  checksum: 34431c106533e761c7875fea023940fb35b426509c5f3b21e30a4bd2f82833494ad047d4c0cc2626788964a720dd049b38156b13a1a9906243c66c68d32819a2
+  languageName: node
+  linkType: hard
+
 "express@npm:^4.17.1, express@npm:^4.18.2":
   version: 4.18.2
   resolution: "express@npm:4.18.2"
@@ -1597,6 +1639,13 @@ __metadata:
   version: 1.4.1
   resolution: "extsprintf@npm:1.4.1"
   checksum: a2f29b241914a8d2bad64363de684821b6b1609d06ae68d5b539e4de6b28659715b5bea94a7265201603713b7027d35399d10b0548f09071c5513e65e8323d33
+  languageName: node
+  linkType: hard
+
+"faker@npm:*, faker@npm:^6.6.6":
+  version: 6.6.6
+  resolution: "faker@npm:6.6.6"
+  checksum: bfb0d581ab4d76095f2c6bff213fe1735ce077f0f8df849c144ad26035e105bce1b7a704cc030366338c52e25b636ac097a712426a78c9b8804af78f6f2bffe7
   languageName: node
   linkType: hard
 
@@ -1703,6 +1752,22 @@ __metadata:
   version: 3.2.7
   resolution: "flatted@npm:3.2.7"
   checksum: 427633049d55bdb80201c68f7eb1cbd533e03eac541f97d3aecab8c5526f12a20ccecaeede08b57503e772c769e7f8680b37e8d482d1e5f8d7e2194687f9ea35
+  languageName: node
+  linkType: hard
+
+"for-in@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "for-in@npm:1.0.2"
+  checksum: 09f4ae93ce785d253ac963d94c7f3432d89398bf25ac7a24ed034ca393bf74380bdeccc40e0f2d721a895e54211b07c8fad7132e8157827f6f7f059b70b4043d
+  languageName: node
+  linkType: hard
+
+"for-own@npm:^0.1.4":
+  version: 0.1.5
+  resolution: "for-own@npm:0.1.5"
+  dependencies:
+    for-in: ^1.0.1
+  checksum: 07eb0a2e98eb55ce13b56dd11ef4fb5e619ba7380aaec388b9eec1946153d74fa734ce409e8434020557e9489a50c34bc004d55754f5863bf7d77b441d8dee8c
   languageName: node
   linkType: hard
 
@@ -2232,6 +2297,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-extendable@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "is-extendable@npm:0.1.1"
+  checksum: 3875571d20a7563772ecc7a5f36cb03167e9be31ad259041b4a8f73f33f885441f778cee1f1fe0085eb4bc71679b9d8c923690003a36a6a5fdf8023e6e3f0672
+  languageName: node
+  linkType: hard
+
 "is-extglob@npm:^2.1.1":
   version: 2.1.1
   resolution: "is-extglob@npm:2.1.1"
@@ -2544,6 +2616,13 @@ __metadata:
   version: 4.1.1
   resolution: "lodash.once@npm:4.1.1"
   checksum: d768fa9f9b4e1dc6453be99b753906f58990e0c45e7b2ca5a3b40a33111e5d17f6edf2f768786e2716af90a8e78f8f91431ab8435f761fef00f9b0c256f6d245
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
   languageName: node
   linkType: hard
 
@@ -2943,6 +3022,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"native-promise-only@npm:~0.8.1":
+  version: 0.8.1
+  resolution: "native-promise-only@npm:0.8.1"
+  checksum: bb4d8416c47d1b2cef0d4eb2c7f3442a9ed04d3734287f4037dfb7ff25948612976928e5baed105081927d5337d3f657e3a42ad2e8cca38a6428a81b32cd6dc4
+  languageName: node
+  linkType: hard
+
 "natural-compare@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
@@ -3115,6 +3201,16 @@ __metadata:
   version: 1.12.3
   resolution: "object-inspect@npm:1.12.3"
   checksum: dabfd824d97a5f407e6d5d24810d888859f6be394d8b733a77442b277e0808860555176719c5905e765e3743a7cada6b8b0a3b85e5331c530fd418cc8ae991db
+  languageName: node
+  linkType: hard
+
+"object.omit@npm:~2.0.0":
+  version: 2.0.1
+  resolution: "object.omit@npm:2.0.1"
+  dependencies:
+    for-own: ^0.1.4
+    is-extendable: ^0.1.1
+  checksum: 581de24e16b72388ad294693daef29072943ef8db3da16aaeb580b5ecefacabe58a744893e9d1564e29130d3465c96ba3e13a03fd130d14f3e06525b3176cac4
   languageName: node
   linkType: hard
 
@@ -3812,6 +3908,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sinon-as-promised@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "sinon-as-promised@npm:4.0.3"
+  dependencies:
+    create-thenable: ~1.0.0
+    native-promise-only: ~0.8.1
+  peerDependencies:
+    sinon: 1
+  checksum: 7f58898b1fc15e93a8b33df7835376496e64b3360ea30bdfe0d604f9a845cea54188819a8397c364c6bb2c59a08456448765f98469ff8aee4eb79f84ada06e69
+  languageName: node
+  linkType: hard
+
+"sinon-stub-promise@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "sinon-stub-promise@npm:4.0.0"
+  checksum: 916d2213ddadcace510718e10b73bdb47cc0e6c588d93a8cf6ca3469b9eb46fc236743cf226bd0c8a57a7d06652f58ab67ad234c52f733c35d1d215f8687651f
+  languageName: node
+  linkType: hard
+
 "sinon@npm:^15.0.3":
   version: 15.0.3
   resolution: "sinon@npm:15.0.3"
@@ -4475,6 +4590,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unique-concat@npm:~0.2.2":
+  version: 0.2.2
+  resolution: "unique-concat@npm:0.2.2"
+  checksum: 3e4682d629f3021e4b9a4e6bc0ea8a4aa63c9288d9a00eb86e592b0cfc03a66777fcb2b3bdb3ded89005a3594131a28b502ee7174f48b4ea6d5f75d85eb88925
+  languageName: node
+  linkType: hard
+
 "unique-filename@npm:^2.0.0":
   version: 2.0.1
   resolution: "unique-filename@npm:2.0.1"
@@ -4554,6 +4676,13 @@ __metadata:
   version: 3.0.1
   resolution: "v8-compile-cache-lib@npm:3.0.1"
   checksum: 78089ad549e21bcdbfca10c08850022b22024cdcc2da9b168bcf5a73a6ed7bf01a9cebb9eac28e03cd23a684d81e0502797e88f3ccd27a32aeab1cfc44c39da0
+  languageName: node
+  linkType: hard
+
+"validator@npm:^13.9.0":
+  version: 13.9.0
+  resolution: "validator@npm:13.9.0"
+  checksum: e2c936f041f61faa42bafd17c6faddf939498666cd82e88d733621c286893730b008959f4cb12ab3e236148a4f3805c30b85e3dcf5e0efd8b0cbcd36c02bfc0c
   languageName: node
   linkType: hard
 
