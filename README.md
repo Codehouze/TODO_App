@@ -14,7 +14,7 @@
 
 ## Setup Locally by running:
 
-####  `git clone git@github.com:HouseOfSounds/hos-backend-updated.git`
+####  `git clone git@github.com:Codehouze/TODO_App.git`
 ####  `cd to TODO_App`
 ####  `yarn install`
 #### Create a .env file with the .env.example template.
