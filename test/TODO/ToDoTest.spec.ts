@@ -32,7 +32,7 @@ describe("TODO Application Unit test", () => {
     });
   });
   describe("TodoService", () => {
-    describe("#createTodo", () => {
+    describe("Create A Todo", () => {
       it("should create a todo successfully", async () => {
         const todoRepoStub = sinon.stub();
         todoRepoStub.resolves(new Todo());
@@ -61,7 +61,7 @@ describe("TODO Application Unit test", () => {
       });
     });
 
-    describe("#updateTodo", () => {
+    describe("Update Todo", () => {
       it("should update a todo successfully", async () => {
         const todo = {
           id: 1,
@@ -161,7 +161,7 @@ describe("TODO Application Unit test", () => {
     });
   });
 
-  describe("#completeTodo", () => {
+  describe("Complete A Todo", () => {
     it("should complete a todo successfully", async () => {
       const todo = {
         id: 1,
@@ -176,4 +176,34 @@ describe("TODO Application Unit test", () => {
       expect(result.message).to.equal("Todo completed");
     });
   });
+  describe ('Delete A Todo',()=>{
+    it("should delete a todo successfully", async () => {
+      const todoRepository = DB.getRepository(Todo);
+    const todo = {
+      id: 1,
+      title: "Test Todo",
+      completed: false,
+      user: userId,
+      isDeleted: false
+    };
+    const findOneStub = sinon.stub(todoRepository, "findOne").resolves(todo);
+    const updateStub = sinon.stub(todoRepository, "update").resolves(true);
+  
+    const result = await TodoService.deleteTodo(1);
+    sinon.assert.calledWith(findOneStub, { where: { id: 1, isDeleted: false } });
+    sinon.assert.calledWith(updateStub, 1, { isDeleted: true });
+    expect(result).to.deep.equal({
+      softDelete: true,
+      message: "Todo deleted successfully"
+    });
+  });
+  
+  it("should return 'Todo not found' if todo is not found", async () => {
+    const todoRepository = DB.getRepository(Todo);
+    const findOneStub = sinon.stub(todoRepository, "findOne").resolves(undefined);
+  
+    const result = await TodoService.deleteTodo(1);
+    sinon.assert.calledWith(findOneStub, { where: { id: 1, isDeleted: false } });
+    expect(result).to.deep.equal({ message: "Todo not found" });
+  });})
 });
