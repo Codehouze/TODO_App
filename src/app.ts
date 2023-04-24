@@ -1,30 +1,41 @@
-import * as dotenv from "dotenv";
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import userRoutes from "./routes/userRoute";
 import todoRoutes from "./routes/todoRoute";
-import ConnectDb from "../src/database/config/index";
+import connectDb from "../src/database/config/index";
+
 const app = express();
-dotenv.config();
-const PORT = process.env.PORT || 9000;
 
-const initializeServer = async () => {
-  await ConnectDb();
-  console.log("========> start <=========");
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.json());
-  app.use("/api/v1/user", userRoutes);
-  app.use("/api/v1/todo", todoRoutes);
+//connect to db
 
-  app.get("/", (_, res) => {
-    res.status(200).json({
-      success: true,
-      message: "Health check => Server is Up!!!",
-    });
-  });
-  app.listen(PORT, () => {
-    console.log(`CONNECTED TO DB AND SERVER START ON ${PORT}`);
-  });
+const initializeDb = async () => {
+  await connectDb();
+  console.log("Connected to database");
 };
-// initializeServer();
-console.log("========> end <=========");
+
+initializeDb();
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Routes
+app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/todo", todoRoutes);
+
+// Health check
+app.get("/", (_, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is up and running",
+  });
+});
+
+// Error handling middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Internal server error",
+  });
+});
+
 export default app;

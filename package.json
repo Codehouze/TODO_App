@@ -1,10 +1,10 @@
 {
   "name": "TODO_App",
   "scripts": {
-    "start": "node dist/src/app.ts",
-    "dev": "nodemon src/app.ts",
+    "start": "node dist/src/index.ts",
+    "dev": "nodemon src/index.ts",
     "build": "yarn tsc",
-    "test": "mocha --timeout 10000 --require ts-node/register test/**/*.spec.ts",
+    "test": "NODE_ENV=test mocha --timeout 10000 --require ts-node/register test/**/*.spec.ts",
     "pm2": "tsc && pm2 start pm2.config.js",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -- migration:create -- config ./src/database/config/index.ts",
     "db:migrate": "",

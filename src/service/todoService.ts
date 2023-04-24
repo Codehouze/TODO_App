@@ -33,7 +33,7 @@ class TodoService {
       where: { user: id, isDeleted: false },
     });
 
-    if (!todo) {
+    if (todo.length == 0) {
       return { data: [], message: "Todo Not Found" };
     }
     return { todo, message: "Todo Found" };

@@ -24,6 +24,12 @@ router.patch(
   TodoController.updateTodo
 ); // Change a to-do
 
+router.patch(
+  "/complete/:id",
+  verifyJwToken,
+  validator.todoValidator,
+  TodoController.completeTodo
+);
 router.delete("/:id", verifyJwToken, TodoController.deleteTodo); // Delete a to-do (do a soft delete)
 
 export default router;
